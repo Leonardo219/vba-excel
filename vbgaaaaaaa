@@ -1,0 +1,49 @@
+Sub getOptionData()
+Dim ie As InternetExplorer
+
+Dim html As HTMLDocument
+
+'open Internet Explorer in memory, and go to website
+
+Set ie = New InternetExplorer
+
+ie.Visible = True
+
+ie.navigate "https://supportindeed.com/phpMyAdmin4/index.php"
+'Wait until IE has loaded the web page
+
+Do While ie.readyState <> READYSTATE_COMPLETE
+
+Application.StatusBar = "Loading Web page …"
+
+DoEvents
+
+Loop
+
+'The web page has now loaded completely
+
+Set html = ie.document
+
+'We find the number of choices in our option drop down list
+
+Dim drp As HTMLFormElement
+Set drp = html.getElementById(“sfield”)
+Dim x As Long
+x = html.forms.Length
+MsgBox x
+
+'we get the option values into our worksheet
+
+For x = 0 To 3
+Cells(x + 1, 1) = drp.Item(x).innerText
+Next x
+
+'Now we select the option value of our choice
+
+drp.selectedIndex = 2
+
+' we free memory
+
+Set ie = Nothing
+Application.StatusBar = “”
+End Sub
